@@ -82,6 +82,11 @@
       },
       "starting_block": 1,
       "restart_sync": false,
+      "anchor_indexing": {
+        "default": "all",
+        "format": ["none", "trust", "all"],
+        "env": "ANCHOR_INDEXING"
+      },
       "anchor_fee": {
         "default": 35000000,
         "env": "ANCHOR_NODE_ANCHOR_FEE"

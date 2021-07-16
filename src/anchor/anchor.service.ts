@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { LoggerService } from '../logger/logger.service';
-import delay from 'delay';
 import { IndexDocumentType } from '../index/model/index.model';
 import { EncoderService } from '../encoder/encoder.service';
 import { StorageService } from '../storage/storage.service';
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class AnchorService {
@@ -14,6 +14,7 @@ export class AnchorService {
     private readonly logger: LoggerService,
     private readonly encoder: EncoderService,
     private readonly storage: StorageService,
+    private readonly config: ConfigService,
   ) {
     this.transactionTypes = [12, 15];
     this.anchorToken = '\u2693';
@@ -21,8 +22,21 @@ export class AnchorService {
 
   async index(index: IndexDocumentType) {
     const { transaction, blockHeight, position } = index;
+    const { sender } = transaction;
+
+    const anchorIndexing = this.config.getAnchorIndexing();
+    const senderRoles = await this.storage.getRolesFor(sender);
+    const isSenderTrustNetwork = Object.keys(senderRoles).length === 0;
+
+    if (anchorIndexing === 'none') {
+      return;
+    }
 
     if (this.transactionTypes.indexOf(transaction.type) === -1) {
+      return;
+    }
+
+    if (anchorIndexing === 'trust' && isSenderTrustNetwork) {
       return;
     }
 
