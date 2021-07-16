@@ -120,4 +120,20 @@ describe('NodeApiService', () => {
       });
     });
   });
+
+  describe('getActivationStatus()', () => {
+    test('should get the activation status', async () => {
+      const spies = spy();
+
+      const mockResponse = { status: 200, data: { height: 12345678, } } as AxiosResponse;
+      spies.request.get.mockImplementation(() => Promise.resolve(mockResponse));
+
+      const result = await nodeApiService.getActivationStatus();
+
+      expect(result).toBe(mockResponse);
+
+      expect(spies.request.get.mock.calls.length).toBe(1);
+      expect(spies.request.get.mock.calls[0][0]).toBe('http://localhost:6869/activation/status');
+    });
+  });
 });

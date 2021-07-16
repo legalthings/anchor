@@ -5,6 +5,7 @@
     "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

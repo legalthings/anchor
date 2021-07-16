@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RedisService } from '../redis/redis.service';
 import { StorageModuleConfig } from './storage.module';
@@ -175,6 +176,44 @@ describe('StorageService', () => {
       expect(setValue.mock.calls[0][0])
         .toBe(`lto:processing-height`);
       expect(setValue.mock.calls[0][1]).toBe(String(height));
+    });
+  });
+
+  describe('transaction fee burn', () => {
+    describe('setTxFeeBurned()', () => {
+      test('should set the new transcation fee burned value', async () => {
+        const setValue = jest.spyOn(redisStorageService, 'setValue').mockImplementation(async () => {});
+
+        await storageService.setTxFeeBurned('20');
+
+        expect(setValue.mock.calls.length).toBe(1);
+        expect(setValue.mock.calls[0][0]).toBe('lto:supply:txfeeburned');
+        expect(setValue.mock.calls[0][1]).toBe('20');
+      });
+    });
+
+    describe('getTxFeeBurned()', () => {
+      test('should get the transaction fee burned value', async () => {
+        const getValue = jest.spyOn(redisStorageService, 'getValue').mockImplementation(async () => '10');
+  
+        const result = await storageService.getTxFeeBurned();
+  
+        expect(getValue.mock.calls.length).toBe(1);
+        expect(getValue.mock.calls[0][0]).toBe('lto:supply:txfeeburned');
+
+        expect(result).toBe(10);
+      });
+
+      test('should not throw if key does not exist on database (getValue throws)', async () => {
+        const getValue = jest.spyOn(redisStorageService, 'getValue').mockRejectedValue(async () => {});
+  
+        const result = await storageService.getTxFeeBurned();
+  
+        expect(getValue.mock.calls.length).toBe(1);
+        expect(getValue.mock.calls[0][0]).toBe('lto:supply:txfeeburned');
+
+        expect(result).toBe(0);
+      });
     });
   });
 

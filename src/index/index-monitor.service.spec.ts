@@ -23,7 +23,7 @@ describe('IndexMonitorService', () => {
       getLastBlockHeight: jest.spyOn(nodeService, 'getLastBlockHeight')
         .mockImplementation(async () => 100),
       getBlock: jest.spyOn(nodeService, 'getBlock')
-        .mockImplementation(async () => ({ height: 100, transactions: [] })),
+        .mockImplementation(async () => ({ height: 100, transactions: [], timestamp: 123 })),
       getBlocks: jest.spyOn(nodeService, 'getBlocks')
         .mockImplementation(async () => ([{ height: 100, transactions: [] }])),
       getNodeStatus: jest.spyOn(nodeService, 'getNodeStatus'),

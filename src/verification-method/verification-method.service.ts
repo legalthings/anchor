@@ -13,7 +13,7 @@ export class VerificationMethodService {
   ) {
   }
 
-  async index(index: IndexDocumentType) {
+  async index(index: IndexDocumentType): Promise<void> {
     const { transaction } = index;
     const { id, sender, party } = transaction;
 
@@ -25,16 +25,16 @@ export class VerificationMethodService {
     const verificationMethod = new VerificationMethod(transaction.associationType, transaction.sender, transaction.party, Math.floor((+new Date()) / 1000));
     
     this.logger.debug(`verificationMethod: address ${sender} has verification method ${verificationMethod.asString()}`);
-    await this.storage.saveVerificationMethod(sender, verificationMethod);
+    return this.storage.saveVerificationMethod(sender, verificationMethod);
   }
   
   async getMethodsFor(address: string): Promise<VerificationMethod[]> {
-    return await this.storage.getVerificationMethods(address);
+    return this.storage.getVerificationMethods(address);
   }
 
   async revoke(verificationMethod: VerificationMethod): Promise<void> {
     verificationMethod.revokedAt = Math.floor((+new Date()) / 1000);
 
-    await this.storage.saveVerificationMethod(verificationMethod.sender, verificationMethod);
+    return this.storage.saveVerificationMethod(verificationMethod.sender, verificationMethod);
   }
 }

@@ -8,9 +8,10 @@ import { NodeModule } from '../node/node.module';
 import { TransactionListenerService } from './transaction-listener.service';
 import { EmitterModule } from '../emitter/emitter.module';
 import { StorageModule } from '../storage/storage.module';
+import { SupplyModule } from '../supply/supply.module';
 
 export const TransactionModuleConfig = {
-  imports: [LoggerModule, ConfigModule, NodeModule, EmitterModule, StorageModule],
+  imports: [LoggerModule, ConfigModule, NodeModule, EmitterModule, StorageModule, SupplyModule],
   controllers: [TransactionController],
   providers: [
     TransactionService,

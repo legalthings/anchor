@@ -18,6 +18,7 @@ import { IndexModule } from './index/index.module';
 import { EmitterModule } from './emitter/emitter.module';
 import { AssociationsModule } from './associations/associations.module';
 import { PublicKeyModule } from './public-key/public-key.module';
+import { SupplyModule } from './supply/supply.module';
 import { TrustNetworkModule } from './trust-network/trust-network.module';
 
 export const AppModuleConfig = {
@@ -40,35 +41,12 @@ export const AppModuleConfig = {
     EmitterModule,
     AssociationsModule,
     PublicKeyModule,
+    SupplyModule,
     TrustNetworkModule,
   ],
   controllers: [AppController],
   providers: [],
 };
 
-@Module({
-  imports: [
-    LoggerModule,
-    ConfigModule,
-    DemoModule,
-    RequestModule,
-    InfoModule,
-    HealthModule,
-    AnchorModule,
-    HashModule,
-    IdentityModule,
-    NodeModule,
-    RedisModule,
-    TransactionModule,
-    StorageModule,
-    AuthModule,
-    IndexModule,
-    EmitterModule,
-    AssociationsModule,
-    PublicKeyModule,
-    TrustNetworkModule,
-  ],
-  controllers: [AppController],
-  providers: [],
-})
+@Module(AppModuleConfig)
 export class AppModule { }

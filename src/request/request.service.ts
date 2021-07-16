@@ -23,7 +23,7 @@ export class RequestService {
     }
   }
 
-  async get(url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse | Error> {
+  async get<T>(url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse<T> | Error> {
     config.method = 'get';
     config.url = url;
     return await this.send(config);

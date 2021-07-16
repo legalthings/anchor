@@ -7,6 +7,22 @@ import { ConfigService } from '../config/config.service';
 import { Transaction } from '../transaction/interfaces/transaction.interface';
 import { AxiosResponse } from 'axios';
 
+export interface Feature {
+  id: number;
+  description: string;
+  blockchainStatus: string;
+  nodeStatus: string;
+  activationHeight?: number;
+}
+
+export interface ActivationStatus {
+  height: number;
+  votingInterval: number;
+  votingThreshold: number;
+  nextCheck: number;
+  features: Feature[];
+}
+
 /**
  * @todo Why does NodeService get things from storage?
  */
@@ -70,7 +86,7 @@ export class NodeService {
     return response.data.height;
   }
 
-  async getBlock(id: string | number): Promise<{ height, transactions }> {
+  async getBlock(id: string | number): Promise<{ height, transactions, timestamp }> {
     const response = await this.api.getBlock(id);
 
     if (response instanceof Error) {
@@ -260,5 +276,15 @@ export class NodeService {
     const address = await this.getNodeWallet();
 
     return { status, address };
+  }
+
+  async getActivationStatus(): Promise<ActivationStatus> {
+    const response = await this.api.getActivationStatus();
+
+    if (response instanceof Error) {
+      throw response;
+    }
+
+    return response.data;
   }
 }

@@ -38,6 +38,7 @@ describe('NodeService', () => {
       getBlocks: jest.spyOn(nodeApiService, 'getBlocks'),
       sendTransaction: jest.spyOn(nodeApiService, 'sendTransaction'),
       getNodeStatus: jest.spyOn(nodeApiService, 'getNodeStatus'),
+      getActivationStatus: jest.spyOn(nodeApiService, 'getActivationStatus'),
     };
 
     return { api, node, storage };
@@ -303,6 +304,38 @@ describe('NodeService', () => {
         status,
         address: 'fake_address',
       });
+    });
+  });
+
+  describe('getActivationStatus()', async () => {
+    test('should return activation status', async () => {
+      const spies = spy();
+
+      const mockResponse = {
+        status: 200,
+        data: {
+          height: 1486819,
+          votingInterval: 6000,
+          votingThreshold: 4000,
+          nextCheck: 1488000,
+          features: [
+            {
+              id: 4,
+              description: 'Smart Accounts',
+              blockchainStatus: 'ACTIVATED',
+              nodeStatus: 'IMPLEMENTED',
+              activationHeight: 420000
+            }
+          ]
+        }
+      } as AxiosResponse;
+
+      spies.api.getActivationStatus.mockImplementation(() => Promise.resolve(mockResponse));
+
+      const result = await nodeService.getActivationStatus();
+
+      expect(result).toBe(mockResponse.data);
+      expect(spies.api.getActivationStatus.mock.calls.length).toBe(1);
     });
   });
 });

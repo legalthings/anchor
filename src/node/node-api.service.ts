@@ -72,4 +72,9 @@ export class NodeApiService {
     const url = this.config.getLtoNodeUrl();
     return await this.request.get(`${url}/node/status`);
   }
+
+  async getActivationStatus(): Promise<AxiosResponse | Error> {
+    const url = this.config.getLtoNodeUrl();
+    return await this.request.get(`${url}/activation/status`);
+  }
 }
